@@ -1,38 +1,97 @@
 package Main;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.Font;
+import java.awt.Graphics;
 
 /**
- *
+ * Just some basic methods to make the code in Main shorter.
+ * 
+ * 41 -> 98
+ * (41 / 98) * 100 = 42 %
+ * 
  * @author Daniel Krauskopf
  */
 public class Methods {
     /**
-     * Rotates the image
-     * from http://flyingdogz.wordpress.com/2008/02/11/image-rotate-in-java-2-easier-to-use/
-     * @param image the image to rotate
-     * @param angle (Math.toRadians()) the angle to rotate by
-     * @return the rotated image
+     * Generates a random number within a given range.
+     * @param min The lower number.
+     * @param max The higher number (the cops are looking for him).
+     * @return The random number between the given values.
      */
-    public static BufferedImage rotate(BufferedImage image, double angle) {
-        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
-        int w = image.getWidth(), h = image.getHeight();
-        int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
-        BufferedImage result = new BufferedImage(neww, newh, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = result.createGraphics();
-        g.translate((neww - w) / 2, (newh - h) / 2);
-        g.rotate(angle, w / 2, h / 2);
-        g.drawRenderedImage(image, null);
-        g.dispose();
-        return result;
-    }
-    
     public static int rand (int min, int max) {
+        // The number.
         int rand;
         do {
+            // Make the random number and scale it to the max.
             rand = (int)(Math.random() * max);
+        // Do it again if the number is smaller then the min.
         } while (rand < min);
+        
+        // Give the number back.
         return rand;
+    }
+    /**
+     * Draws a string in the center of the screen (taking into account the size of the font).
+     * @param graphics The graphics to draw to.
+     * @param string The string to draw.
+     * @param font The font to use.
+     */
+    public static void drawString (Graphics graphics, String string, Font font) {
+        // The middle (to draw font) of the screen in x.
+        // Window width divided by two subtract font width for the string diveded by two.
+        int x = (Main.WINDOW_SIZE[0] / 2) - (graphics.getFontMetrics(font).stringWidth(string) / 2);
+        
+        // The middle (to draw font) of the screen in y.
+        // Window height divided by two subtract font height divided by two.
+        int y = (Main.WINDOW_SIZE[1] / 2) + (graphics.getFontMetrics(font).getHeight() / 2);
+        
+        // Draw the string at the given locations.
+        Methods.drawString(graphics, string, font, x, y);
+    }
+    /**
+     * Draws a string in the middle (y only) (taking into account the height of the font).
+     * @param graphics The graphics to draw to.
+     * @param string The string to draw.
+     * @param font The font to use.
+     * @param x The x value to draw the string at.
+     */
+    public static void drawString (Graphics graphics, String string, Font font, int x) {
+        // The middle (to draw font) of the screen in y.
+        // Window height divided by two subtract font height divided by two.
+        int y = (Main.WINDOW_SIZE[1] / 2) + graphics.getFontMetrics(font).getHeight();
+        
+        // Draw the string at the given location
+        Methods.drawString(graphics, string, font, x, y);
+    }
+    /**
+     * Draws a string in the middle (x only) (taking into account the width of the font for the given string).
+     * y is at the beginning to allow for correct overloading of the method.
+     * @param y The y position to draw the string at.
+     * @param graphics The graphics to draw to.
+     * @param string The string to draw.
+     * @param font The font to use.
+     */
+    public static void drawString (int y, Graphics graphics, String string, Font font) {
+        // The middle (to draw font) of the screen in x.
+        // Window width divided by two subtract font width for the string diveded by two.
+        int x = (Main.WINDOW_SIZE[0] / 2) - (graphics.getFontMetrics(font).stringWidth(string) / 2);
+        
+        // Draw the string at the given location.
+        Methods.drawString(graphics, string, font, x, y);
+    }
+    /**
+     * Draws a string.
+     * @param graphics The graphics to draw to.
+     * @param string The string to draw.
+     * @param font The font to use.
+     * @param x The x location to draw to.
+     * @param y The y location to draw to.
+     */
+    public static void drawString (Graphics graphics, String string, Font font, int x, int y) {
+        // set the font of the graphics to the given font
+        graphics.setFont(font);
+        
+        // Draw the string
+        graphics.drawString(string, x, y);
     }
 }
